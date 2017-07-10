@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>JSONP百度搜索跨域</title>
+<style>
+#search_input{
+    width: 500px;
+    height: 30px;
+    border:1px solid #ddd;
+    line-height: 30px;
+    display: block;
+    margin: 100px auto 0 auto;
+    padding: 0 10px;
+    font-size: 16px;
+}
+#ul{
+    width: 520px;
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    border:1px solid #ddd;
+    margin-top: -1px;
+    display: none;
+    font-size: 14px;
+}
+#ul li{
+    line-height: 30px;
+    padding: 0 10px;
+}
+#ul li:hover{
+    background-color: #f0f0f0;
+}
+</style>
+<script>
+
+// 定义demo函数 (分析接口、数据)
+function demo(data){
+    var oUl = document.getElementById('ul');
+    var html = '';
+    // 如果搜索数据存在 把内容添加进去
+    if (data.s.length) {
+        // 隐藏掉的ul显示出来
+        oUl.style.display = 'block';
+        // 搜索到的数据循环追加到li里
+        for(var i = 0;i<data.s.length;i++){
+            html += '<li>'+data.s[i]+'</li>';
+        }
+        // 循环的li写入ul
+        oUl.innerHTML = html;
+    }
+}
+
+    window.onload = function(){
+        // 获取输入框和ul
+        var oSI = document.getElementById('search_input');
+        var oUl = document.getElementById('ul');
+
+        oSI.onfocus = show;
+        oSI.onkeyup = show;
+        oSI.onblur = function(){
+            oUl.style.display = "none";
+        }
+
+        function show(){
+            // 如果输入框不等于空
+            if (this.value != '') {
+                // 创建标签
+                var oScript = document.createElement('script');
+                //给定要跨域的地址 赋值给src
+                oScript.src = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+this.value+'&cb=demo';//这里是要请求的跨域的地址
+
+                // 将组合好的带src的script标签追加到body里
+                document.body.appendChild(oScript);
+            }else {
+                oUl.style.display = "none";
+            }
+        }
+
+    }
+</script>
+</head>
+
+<body>
+    <input type="text" id="search_input" />
+    <ul id="ul">
+
+    </ul>
+</body>
+</html>
